@@ -1,0 +1,27 @@
+.body-container{
+    max-width: 1200px;
+    margin: auto;
+    padding: 10px;
+}
+
+.container, .container-fluid{
+    margin: 50px auto;
+}
+
+#header{
+    padding: 0px;
+}
+
+#done-button{
+    float: right;
+}
+
+.card{
+    margin-bottom: 5px;
+}
+
+::-webkit-datetime-edit-year-field:not([aria-valuenow]),
+::-webkit-datetime-edit-month-field:not([aria-valuenow]),
+::-webkit-datetime-edit-day-field:not([aria-valuenow]) {
+    color: transparent;
+}
