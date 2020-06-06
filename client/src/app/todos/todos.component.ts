@@ -14,6 +14,7 @@ export class TodosComponent implements OnInit {
   constructor(private service: ServicesService) { }
 
   todos: Todo[];
+  term = "";
 
   form: FormGroup = new FormGroup({
     name: new FormControl('', Validators.required),
@@ -23,8 +24,13 @@ export class TodosComponent implements OnInit {
   ngOnInit(): void {
     this.service.getTodos().subscribe(
       (data) => {
+        for(let i=0; i<data.length; i++){
+          let date = data[i].date;
+          date = date.toString().substring(0, 10);
+          let formattedDate = date.substring(8, 10) + "-" + date.substring(5, 7) + "-" + date.substring(0, 4);
+          data[i].date = formattedDate;
+        }
         this.todos = data;
-        console.log(data);
       }
     )
   }
@@ -38,8 +44,13 @@ export class TodosComponent implements OnInit {
           this.todos.push(data.response);
           this.service.getTodos().subscribe(
             (data) => {
+              for(let i=0; i<data.length; i++){
+                let date = data[i].date;
+                date = date.toString().substring(0, 10);
+                let formattedDate = date.substring(8, 10) + "-" + date.substring(5, 7) + "-" + date.substring(0, 4);
+                data[i].date = formattedDate;
+              }
               this.todos = data;
-              console.log(data);
             }
           )
         }

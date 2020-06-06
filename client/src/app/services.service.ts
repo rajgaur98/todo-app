@@ -14,7 +14,7 @@ export class ServicesService {
   
   getTodos(){
     let url = baseUrl + 'todos';
-    return this.http.get<Todo[]>(url); 
+    return this.http.get<Todo[]>(url);
   }
 
   addTodo(newTodo){

@@ -30,16 +30,27 @@
         </form>
         <div class="container">
             <div class="input-group input-group-sm">
-                    <span class="lead col-md-7">Your pending tasks</span>
-                    <input type="text" class="form-control col-md-5" placeholder="Search">
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="button">
-                            <img src="https://images.vexels.com/media/users/3/132068/isolated/preview/f9bb81e576c1a361c61a8c08945b2c48-search-icon-by-vexels.png" height="20" width="20">
-                        </button>
-                    </div>
+                <ul class="nav nav-pills col-md-7">
+                    <li class="nav-item">
+                      <a class="nav-link active" href="">All</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="">Personal</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="">Work</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="">Shopping</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="">Others</a>
+                    </li>
+                  </ul>                  
+                <input type="text" class="form-control col-md-5" placeholder="Search" [(ngModel)]="term" name="filter">
             </div>
             <br>
-            <div *ngFor="let todo of todos" class="card">
+            <div *ngFor="let todo of todos | filter: term" class="card">
                 <div class="card-header">
                     {{ todo.name }} ~ {{ todo.date }}
                     <button class="btn btn-xs btn-primary" id="done-button" (click)="deleteTodo(todo._id)">X</button>

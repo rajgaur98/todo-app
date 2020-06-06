@@ -5,8 +5,8 @@ const Todo = require('../models/todos');
 
 // retrieving todos
 router.get('/todos', (req, res, next)=>{
-    Todo.find((error, todos)=>{
-        res.json(todos);
+    Todo.find({}).sort({date: -1}).collation({locale: "en_US", numericOrdering: true}).then((todos)=>{
+        res.send(todos);
     });
 });
 
@@ -19,6 +19,18 @@ router.post('/todo', (req, res, next)=>{
     newTodo.save((error, todo)=>{
         if(error){
             res.json({'response': 'Todo creation failed'});
+        }
+        else{
+            res.json(todo);
+        }
+    });
+});
+
+// updating todo
+router.put('/todo/:id', (req, res)=>{
+    Todo.findByIdAndUpdate({_id: req.params.id}, req.body, {new: true}, (error, todo)=>{
+        if(error){
+            res.json(error);
         }
         else{
             res.json(todo);
