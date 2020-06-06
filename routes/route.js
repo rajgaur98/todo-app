@@ -21,7 +21,7 @@ router.post('/todo', (req, res, next)=>{
             res.json({'response': 'Todo creation failed'});
         }
         else{
-            res.json({'response': 'Todo created'});
+            res.json(todo);
         }
     });
 });

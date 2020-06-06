@@ -17,60 +17,32 @@
         </div>
     </div>
     <div class="body-container">
-        <div class="container text-muted">
-            <div class="input-group input-group-lg">
-                <input type="text" class="form-control col-md-8" placeholder="Enter your pending task">
-                <input type="date" class="form-control col-md-4" placeholder="Due date">
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button">Add</button>
+        <form [formGroup]="form" (submit)="addTodo()">
+            <div class="container text-muted">
+                <div class="input-group input-group-lg">
+                        <input type="text" class="form-control col-md-8" placeholder="Enter your pending task" formControlName="name">
+                        <input type="date" class="form-control col-md-4" placeholder="Due date" formControlName="date">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="submit" [disabled]="form.invalid">Add</button>
+                        </div>
                 </div>
             </div>
-        </div>
+        </form>
         <div class="container">
-            <div class="input-group">
-                <span class="lead col-md-7">Your pending tasks</span>
-                <input type="text" class="form-control col-md-5" placeholder="Search">
-                <div class="input-group-append">
-                    <button class="btn btn-success" type="button">
-                        <img src="https://images.vexels.com/media/users/3/132068/isolated/preview/f9bb81e576c1a361c61a8c08945b2c48-search-icon-by-vexels.png" height="20" width="20">
-                    </button>
-                </div>
+            <div class="input-group input-group-sm">
+                    <span class="lead col-md-7">Your pending tasks</span>
+                    <input type="text" class="form-control col-md-5" placeholder="Search">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button">
+                            <img src="https://images.vexels.com/media/users/3/132068/isolated/preview/f9bb81e576c1a361c61a8c08945b2c48-search-icon-by-vexels.png" height="20" width="20">
+                        </button>
+                    </div>
             </div>
             <br>
-            <div class="card">
+            <div *ngFor="let todo of todos" class="card">
                 <div class="card-header">
-                    Eat water ~ 12/12/12
-                </div>
-                <div class="card-body">
-                    <span class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</span>
-                    <button class="btn btn-primary" id="done-button">X</button>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-header">
-                    Eat water ~ 12/12/12
-                </div>
-                <div class="card-body">
-                    <span class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</span>
-                    <button class="btn btn-primary" id="done-button">X</button>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-header">
-                    Eat water ~ 12/12/12
-                </div>
-                <div class="card-body">
-                    <span class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</span>
-                    <button class="btn btn-primary" id="done-button">X</button>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-header">
-                    Eat water ~ 12/12/12
-                </div>
-                <div class="card-body">
-                    <span class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</span>
-                    <button class="btn btn-primary" id="done-button">X</button>
+                    {{ todo.name }} ~ {{ todo.date }}
+                    <button class="btn btn-xs btn-primary" id="done-button" (click)="deleteTodo(todo._id)">X</button>
                 </div>
             </div>
         </div>
