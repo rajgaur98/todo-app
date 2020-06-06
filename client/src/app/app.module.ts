@@ -1,3 +1,4 @@
+import { Routes, RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -6,6 +7,15 @@ import { AppComponent } from './app.component';
 import { TodosComponent } from './todos/todos.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FilterPipe } from './filter.pipe';
+
+const appRoutes: Routes = [
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: 'home', component: TodosComponent, 
+    children: [
+      { path: ':label', component: TodosComponent, }
+    ]
+  }
+]
 
 
 @NgModule({
@@ -20,6 +30,10 @@ import { FilterPipe } from './filter.pipe';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    RouterModule.forRoot(
+      appRoutes,
+      { onSameUrlNavigation: 'reload' } // <-- debugging purposes only
+    )
   ],
   providers: [],
   bootstrap: [AppComponent]

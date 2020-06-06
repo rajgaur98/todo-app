@@ -5,20 +5,29 @@ const Todo = require('../models/todos');
 
 // retrieving todos
 router.get('/todos', (req, res, next)=>{
-    Todo.find({}).sort({date: -1}).collation({locale: "en_US", numericOrdering: true}).then((todos)=>{
-        res.send(todos);
-    });
+    if(req.query.label === 'all')
+        Todo.find({}).sort({date: 1}).collation({locale: "en_US", numericOrdering: true}).then((todos)=>{
+            res.send(todos);
+        });
+    else
+        Todo.find({label: req.query.label}).sort({date: -1}).collation({locale: "en_US", numericOrdering: true}).then((todos)=>{
+            res.send(todos);
+        });
 });
 
 // adding todo
 router.post('/todo', (req, res, next)=>{
+    var label = req.body.label;
+    if(label === 'Choose..' || label === '' || label === null)
+        label = 'others';
     let newTodo = new Todo({
         name: req.body.name,
-        date: req.body.date
+        date: req.body.date,
+        label: label
     });
     newTodo.save((error, todo)=>{
         if(error){
-            res.json({'response': 'Todo creation failed'});
+            res.json({'response': 'Todo creation failed', error});
         }
         else{
             res.json(todo);

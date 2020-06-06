@@ -12,8 +12,8 @@ export class ServicesService {
   constructor(private http: HttpClient) { }
 
   
-  getTodos(){
-    let url = baseUrl + 'todos';
+  getTodos(label){
+    let url = baseUrl + 'todos?label=' + label;
     return this.http.get<Todo[]>(url);
   }
 
@@ -27,6 +27,13 @@ export class ServicesService {
   deleteTodo(todo_id){
     let url = baseUrl + 'todo/' + todo_id;
     return this.http.delete<any>(url); 
+  }
+
+  updateTodo(todo_id, status){
+    let url = baseUrl + 'todo/' + todo_id;
+    var headers = new HttpHeaders();
+    headers.append('Content-Type', 'application/json');
+    return this.http.put(url, {status: status}, {headers: headers});
   }
 
 }

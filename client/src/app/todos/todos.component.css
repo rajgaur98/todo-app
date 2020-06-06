@@ -19,3 +19,11 @@
 .card{
     margin-bottom: 5px;
 }
+
+a:hover{
+    cursor: pointer;
+}
+
+.card-header{
+    vertical-align: middle;
+}

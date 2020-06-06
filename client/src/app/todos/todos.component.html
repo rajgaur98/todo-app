@@ -20,8 +20,14 @@
         <form [formGroup]="form" (submit)="addTodo()">
             <div class="container text-muted">
                 <div class="input-group input-group-lg">
-                        <input type="text" class="form-control col-md-8" placeholder="Enter your pending task" formControlName="name">
-                        <input type="date" class="form-control col-md-4" placeholder="Due date" formControlName="date">
+                        <input type="text" class="form-control col-xs-12 col-md-6" placeholder="Enter your pending task" formControlName="name">
+                        <input type="date" class="form-control col-xs-12 col-md-3" placeholder="Due date" formControlName="date">
+                        <select class="select-picker col-xs-12 col-md-3" formControlName="label">
+                            <option value="" disabled selected>Select a label</option>
+                            <option value="personal">Personal</option>
+                            <option value="work">Work</option>
+                            <option value="shopping">Shopping</option>
+                        </select>
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary" type="submit" [disabled]="form.invalid">Add</button>
                         </div>
@@ -32,19 +38,19 @@
             <div class="input-group input-group-sm">
                 <ul class="nav nav-pills col-md-7">
                     <li class="nav-item">
-                      <a class="nav-link active" href="">All</a>
+                      <a class="nav-link" (click)="switchLabel(0)" [ngClass]="activeTab === 0? 'active': 'inactive'">All</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="">Personal</a>
+                      <a class="nav-link" (click)="switchLabel(1)" [ngClass]="activeTab === 1? 'active': 'inactive'">Personal</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="">Work</a>
+                      <a class="nav-link" (click)="switchLabel(2)" [ngClass]="activeTab === 2? 'active': 'inactive'">Work</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="">Shopping</a>
+                      <a class="nav-link" (click)="switchLabel(3)" [ngClass]="activeTab === 3? 'active': 'inactive'">Shopping</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="">Others</a>
+                        <a class="nav-link" (click)="switchLabel(4)" [ngClass]="activeTab === 4? 'active': 'inactive'">Others</a>
                     </li>
                   </ul>                  
                 <input type="text" class="form-control col-md-5" placeholder="Search" [(ngModel)]="term" name="filter">
@@ -53,15 +59,27 @@
             <div *ngFor="let todo of todos | filter: term" class="card">
                 <div class="card-header">
                     {{ todo.name }} ~ {{ todo.date }}
-                    <button class="btn btn-xs btn-primary" id="done-button" (click)="deleteTodo(todo._id)">X</button>
+                    <div id="done-button">
+                        <select class="select-picker mr-2" (change)="updateStatus(todo._id, $event)">
+                            <option *ngIf="todo.status !== 'new'" value="new">new</option>
+                            <option *ngIf="todo.status === 'new'" value="new" selected>new</option>
+                            <option *ngIf="todo.status !== 'in_progress'" value="in_progress">in progress</option>
+                            <option *ngIf="todo.status === 'in_progress'" value="in_progress" selected>in progress</option>
+                            <option *ngIf="todo.status !== 'finished'" value="finished">finished</option>
+                            <option *ngIf="todo.status === 'finished'" value="finished" selected>finished</option>
+                        </select>
+                        <button class="btn btn-xs btn-primary" (click)="deleteTodo(todo._id)">X</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    
+
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
   </body>
 </html>

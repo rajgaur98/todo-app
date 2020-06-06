@@ -2,6 +2,7 @@ import { ServicesService } from './../services.service';
 import { Component, OnInit } from '@angular/core';
 import { Todo } from './todo';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -11,18 +12,42 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 })
 export class TodosComponent implements OnInit {
 
-  constructor(private service: ServicesService) { }
+  constructor(private service: ServicesService, private router: Router, private route: ActivatedRoute) { 
+    
+  }
 
   todos: Todo[];
   term = "";
+  activeTab: number;
+  labels = ['all', 'personal', 'work', 'shopping', 'others'];
+  label = 'all';
 
   form: FormGroup = new FormGroup({
     name: new FormControl('', Validators.required),
-    date: new FormControl('', Validators.required)
+    date: new FormControl('', Validators.required),
+    label: new FormControl('')
   });
 
   ngOnInit(): void {
-    this.service.getTodos().subscribe(
+    var url = this.router.url.split('/');
+    this.label = url.length == 3? url[2]: 'all';
+    this.activeTab = this.labels.indexOf(this.label);
+    this.router.events.subscribe((val) => {
+      this.label = this.router.url.split('/')[2];
+      this.activeTab = this.labels.indexOf(this.label);
+      this.service.getTodos(this.label).subscribe(
+        (data) => {
+          for(let i=0; i<data.length; i++){
+            let date = data[i].date;
+            date = date.toString().substring(0, 10);
+            let formattedDate = date.substring(8, 10) + "-" + date.substring(5, 7) + "-" + date.substring(0, 4);
+            data[i].date = formattedDate;
+          }
+          this.todos = data;
+        }
+      )
+    });
+    this.service.getTodos(this.label).subscribe(
       (data) => {
         for(let i=0; i<data.length; i++){
           let date = data[i].date;
@@ -40,9 +65,8 @@ export class TodosComponent implements OnInit {
       (data) => {
         this.form.reset();
         if(data.response !== 'Todo creation failed'){
-          console.log(data.response);
           this.todos.push(data.response);
-          this.service.getTodos().subscribe(
+          this.service.getTodos(this.label).subscribe(
             (data) => {
               for(let i=0; i<data.length; i++){
                 let date = data[i].date;
@@ -65,11 +89,39 @@ export class TodosComponent implements OnInit {
           for(let i=0; i<this.todos.length; i++){
             if(this.todos[i]._id === todo_id){
               this.todos.splice(i, 1);
+              this.service.getTodos(this.label).subscribe(
+                (data) => {
+                  for(let i=0; i<data.length; i++){
+                    let date = data[i].date;
+                    date = date.toString().substring(0, 10);
+                    let formattedDate = date.substring(8, 10) + "-" + date.substring(5, 7) + "-" + date.substring(0, 4);
+                    data[i].date = formattedDate;
+                  }
+                  this.todos = data;
+                }
+              )
             }
           }
         }
       }
     )
+  }
+
+
+  switchLabel(index: number){
+    this.activeTab = index;
+    this.router.navigate([this.labels[index]], {relativeTo: this.route});
+  }
+
+  updateStatus(todo_id, event){
+    this.service.updateTodo(todo_id, event.target.value).subscribe(
+      (data) => {
+        for(let i=0; i<this.todos.length; i++){
+          if(this.todos[i]._id === todo_id)
+            this.todos[i].status = event.target.value;
+        }
+      }
+    );
   }
 
 }
