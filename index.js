@@ -9,7 +9,8 @@ var app = express();
 
 const route = require('./routes/route');
 
-mongoose.connect('mongodb+srv://root:root@cluster0-ktwkp.mongodb.net/<dbname>?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true } );
+mongoose.connect('mongodb+srv://root:root@cluster0-ktwkp.mongodb.net/todolist?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true } );
+
 
 mongoose.connection.on('connected', ()=>{
     console.log('mongodb connected');
