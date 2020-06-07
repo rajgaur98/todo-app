@@ -2,7 +2,7 @@ import { Todo } from './todos/todo';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-const baseUrl = 'http://localhost:5000/api/';
+const baseUrl = 'api/';
 
 @Injectable({
   providedIn: 'root'
